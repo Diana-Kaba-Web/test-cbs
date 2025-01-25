@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authors and books</title>
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- /BOOTSTRAP -->
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- MAIN CONTAINER -->
+    <div class="container mt-5">
+        <h1 class="text-center m-5">Authors and books</h1>
+
+        <!-- TABLE CONTAINER -->
+        <div class="container">
+            <table class="table">
+                <thead>
+                    <th>Author</th>
+                    <th>Count of books</th>
+                    <th>More info</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!-- /TABLE CONTAINER -->
+
+        <!-- DETAILS CONTAINER -->
+        <div class="container mt-4 d-none author-details">
+            <h2>Detailed information</h2>
+            <p><strong>Author:</strong> <span id="author-name"></span></p>
+            <p><strong>Date of birth:</strong> <span id="author-birthdate"></span></p>
+            <p><strong>Books:</strong></p>
+            <ul id="author-books"></ul>
+        </div>
+        <!-- /DETAILS CONTAINER -->
+
+    </div>
+    <!-- /MAIN CONTAINER -->
+
+    <script src="script.js"></script>
+</body>
+</html>
