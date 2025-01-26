@@ -22,7 +22,14 @@ export function showAuthorForm() {
     authorFormSection.classList.remove("d-none");
 }
 
+export function showBookForm() {
+    const bookFormSection = document.querySelector(".book-form");
+    bookFormSection.classList.remove("d-none");
+}
+
 export function makeRows(authors) {
+    document.querySelector("tbody").innerHTML = '';
+
     let i = 0;
     authors.forEach(author => {
         document.querySelector("tbody").innerHTML += `
@@ -60,6 +67,14 @@ export function addDetailsEventListeners(authors) {
     });
 }
 
+export function populateAuthorDropdown(authors) {
+    const dropdown = document.getElementById("book-author");
+
+    authors.forEach((author, index) => {
+        dropdown.innerHTML += `<option value="${index}">${author.firstName} ${author.lastName}</option>`;
+    });
+}
+
 export function addAuthor(event, authors) {
     event.preventDefault();
 
@@ -74,11 +89,41 @@ export function addAuthor(event, authors) {
         document.getElementById("error-year").classList.add("d-none");
     }
 
-    const authorFormSection = document.querySelector(".author-form");
-
     const newAuthor = new Classes.Author(lastName, firstName, middleName, yearDate);
     authors.push(newAuthor);
-    makeRow(authors);
 
-    authorFormSection.classList.add("d-none");
+    makeRow(authors);
+    populateAuthorDropdown(authors);
+
+    document.querySelector(".author-form").classList.add("d-none");
+    document.getElementById("author-form").reset();
+}
+
+export function addBook(event, authors) {
+    event.preventDefault();
+
+    const title = document.getElementById("book-title").value.trim();
+    const pages = Number(document.getElementById("book-pages").value);
+    const genre = document.getElementById("book-genre").value.trim();
+    const authorIndex = document.getElementById("book-author").value;
+
+    const isDuplicate = authors[authorIndex].books.some(
+        book => book.title.toLowerCase() === title.toLowerCase()
+    );
+
+    if (isDuplicate) {
+        document.getElementById("error-title").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-title").classList.add("d-none");
+    }
+
+    const newBook = new Classes.Book(title, pages, genre);
+    authors[authorIndex].addBook(newBook);
+
+    makeRows(authors);
+    addDetailsEventListeners(authors);
+
+    document.querySelector(".book-form").classList.add("d-none");
+    document.getElementById("book-form").reset();
 }

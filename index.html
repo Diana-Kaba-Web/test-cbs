@@ -41,7 +41,8 @@
             <p><strong>Рік народження:</strong> <span id="author-birthyear"></span></p>
             <p><strong>Книги:</strong></p>
             <ul id="author-books"></ul>
-            <button class="btn btn-sm btn-primary btn-hide">Заховати</button>
+            <button class="btn btn-sm btn-primary add-book">Додати книгу</button>
+            <button class="btn btn-sm btn-primary btn-hide">Заховати деталі</button>
         </div>
         <!-- /DETAILS CONTAINER -->
 
@@ -62,7 +63,7 @@
                     <input type="text" id="author-middlename" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="author-birthyear" class="form-label">Рік народження</label>
+                    <label for="author-yearbirth" class="form-label">Рік народження</label>
                     <input type="number" id="author-yearbirth" class="form-control" required>
                     <div class="mt-2 alert alert-danger d-none" id="error-year">Помилка! Введіть рік від 1900 до поточного року.</div>
                 </div>
@@ -70,6 +71,34 @@
             </form>
         </div>
         <!-- /FORM ADD AUTHOR -->
+
+        <!-- FORM ADD BOOK -->
+        <div class="container p-5 d-none book-form">
+            <h3>Додати книгу</h3>
+            <form id="book-form">
+                <div class="mb-3">
+                    <label for="book-title" class="form-label">Назва книги</label>
+                    <input type="text" id="book-title" class="form-control" required>
+                    <div class="mt-2 alert alert-danger d-none" id="error-title">Помилка! Ця книга вже додана.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="book-pages" class="form-label">Кількість сторінок</label>
+                    <input type="number" id="book-pages" class="form-control" min="1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="book-genre" class="form-label">Жанр</label>
+                    <input type="text" id="book-genre" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="book-author" class="form-label">Автор</label>
+                    <select id="book-author" class="form-control" required>
+                        <option value="">Виберіть автора</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Додати книгу</button>
+            </form>
+        </div>
+        <!-- /FORM ADD BOOK -->
 
     </div>
     <!-- /MAIN CONTAINER -->

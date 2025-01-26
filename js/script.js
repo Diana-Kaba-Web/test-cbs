@@ -5,7 +5,7 @@ const authors = [];
 
 const author1 = new Classes.Author("Шевченко", "Тарас", "Григорович", 1564);
 const author2 = new Classes.Author("Шекспір", "Вільям", "", 1722);
-const author3 = new Classes.Author("Джоан", "Роулінг", "", 1965);
+const author3 = new Classes.Author("Роулінг", "Джоан", "", 1965);
 
 authors.push(author1);
 authors.push(author2);
@@ -29,6 +29,13 @@ Functions.addDetailsEventListeners(authors);
 document.querySelector(".btn-hide").addEventListener("click", Functions.hideAuthorDetails);
 
 document.querySelector(".add-author").addEventListener("click", Functions.showAuthorForm);
+document.querySelector(".add-book").addEventListener("click", Functions.showBookForm);
+
 document.getElementById("author-form").addEventListener("submit", (event) => {
     Functions.addAuthor(event, authors);
+});
+
+Functions.populateAuthorDropdown(authors);
+document.getElementById("book-form").addEventListener("submit", (event) => {
+    Functions.addBook(event, authors);
 });
