@@ -5,11 +5,12 @@ export function showAuthorDetails(authors, index) {
     console.log("Автор:", author);
     const authorDetailsSection = document.querySelector(".author-details");
     authorDetailsSection.classList.remove("d-none");
+    authorDetailsSection.setAttribute("data-author-index", index);
 
     document.getElementById("author-name").textContent = `${author.lastName} ${author.firstName} ${author.middleName || ''}`;
     document.getElementById("author-birthyear").textContent = author.birthYear;
     const booksList = document.getElementById("author-books");
-    booksList.innerHTML = author.books.map(book => `<li>"${book.title}" - ${book.genre}, ${book.pages} сторінок</li>`).join("");
+    booksList.innerHTML = author.books.map((book, i) => `<li>"№${i} ${book.title}" - ${book.genre}, ${book.pages} сторінок</li>`).join("");
 }
 
 export function hideAuthorDetails() {
@@ -37,6 +38,10 @@ export function hideBookForm() {
     bookFormSection.classList.add("d-none");
 }
 
+export function showDeleteBookForm() {
+    document.querySelector(".delete-book-form").classList.remove("d-none");
+}
+
 export function makeRows(authors) {
     document.querySelector("tbody").innerHTML = '';
 
@@ -48,6 +53,7 @@ export function makeRows(authors) {
             <td>${author.countOfBooks}</td>
             <td>
                 <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
+                <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
             </td>
         </tr>`;
         i++;
@@ -63,9 +69,11 @@ export function makeRow(authors) {
         <td>${authors[i].countOfBooks}</td>
         <td>
             <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
+            <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
         </td>
     </tr>`;
     addDetailsEventListeners(authors);
+    addDeletedEventListeners(authors);
 }
 
 export function addDetailsEventListeners(authors) {
@@ -73,6 +81,25 @@ export function addDetailsEventListeners(authors) {
         btn.addEventListener('click', (event) => {
             const authorIndex = event.target.getAttribute("data-author-index");
             showAuthorDetails(authors, authorIndex);
+        });
+    });
+}
+
+export function addDeletedEventListeners(authors) {
+    document.querySelectorAll(".btn-delete").forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const authorIndex = event.target.getAttribute("data-author-index");
+            deleteAuthor(authorIndex, authors);
+        });
+    });
+}
+
+export function addDeleteBookEventListeners(authors) {
+    document.querySelectorAll(".delete-book").forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const authorIndex = event.target.getAttribute("data-author-index");
+            const bookIndex = event.target.getAttribute("data-book-index");
+            deleteBookByIndex(event, authorIndex, authorIndex);
         });
     });
 }
@@ -139,6 +166,42 @@ export function addBook(event, authors) {
     document.querySelector(".book-form").classList.add("d-none");
     document.getElementById("book-form").reset();
 }
+
+export function deleteAuthor(index, authors) {
+    const isSure = confirm("Ви точно бажаєте видалити автора?");
+    if (isSure) {
+        authors.splice(index, 1);
+        saveToLocalStorage(authors);
+        makeRows(authors);
+        addDeletedEventListeners(authors);
+        addDetailsEventListeners(authors);
+    }
+}
+
+export function deleteBookByIndex(event, authors, authorIndex) {
+    event.preventDefault();
+
+    const bookIndex = document.getElementById("book-index").value;
+    if (bookIndex < 0 || bookIndex >= authors[authorIndex].books.length) {
+        document.getElementById("error-book-index").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-book-index").classList.add("d-none");
+    }
+
+    const isSure = confirm("Ви точно бажаєте видалити цю книгу?");
+    if (isSure) {
+        authors[authorIndex].books.splice(bookIndex, 1); // Видалення книги
+        authors[authorIndex].countOfBooks--; // Оновлення кількості книг
+        saveToLocalStorage(authors); // Зберігаємо зміни
+        showAuthorDetails(authors, authorIndex); // Оновлюємо деталі автора
+        makeRows(authors); // Оновлюємо таблицю авторів
+
+        document.querySelector(".delete-book-form").classList.add("d-none"); // Ховаємо форму
+        document.getElementById("delete-book-form").reset(); // Скидаємо форму
+    }
+}
+
 
 // LOCALSTORAGE
 

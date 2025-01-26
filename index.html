@@ -42,6 +42,7 @@
             <p><strong>Книги:</strong></p>
             <ul id="author-books"></ul>
             <button class="btn btn-sm btn-primary add-book">Додати книгу</button>
+            <button class="btn btn-sm btn-primary delete-book">Видалити книгу</button>
             <button class="btn btn-sm btn-primary btn-hide">Заховати деталі</button>
         </div>
         <!-- /DETAILS CONTAINER -->
@@ -101,6 +102,21 @@
             </form>
         </div>
         <!-- /FORM ADD BOOK -->
+
+        <!-- FORM DELETE BOOK -->
+        <div class="container p-5 d-none delete-book-form">
+            <h3>Видалення книги</h3>
+            <form id="delete-book-form">
+                <div class="mb-3">
+                    <label for="book-index" class="form-label">Індекс книги</label>
+                    <input type="number" id="book-index" class="form-control" min="0" required>
+                    <div class="mt-2 alert alert-danger d-none" id="error-book-index">Помилка! Невірний індекс книги.</div>
+                </div>
+                <button type="submit" class="btn btn-danger">Видалити книгу</button>
+            </form>
+        </div>
+
+        <!-- /FORM DELETE BOOK -->
 
     </div>
     <!-- /MAIN CONTAINER -->

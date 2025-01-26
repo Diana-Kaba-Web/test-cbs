@@ -46,3 +46,13 @@ Functions.populateAuthorDropdown(authors);
 document.getElementById("book-form").addEventListener("submit", (event) => {
     Functions.addBook(event, authors);
 });
+
+Functions.addDeletedEventListeners(authors);
+Functions.addDeleteBookEventListeners(authors);
+
+document.querySelector(".delete-book").addEventListener("click", Functions.showDeleteBookForm);
+document.getElementById("delete-book-form").addEventListener("submit", (event) => {
+    const authorIndex = document.querySelector(".author-details").getAttribute("data-author-index");
+    Functions.deleteBookByIndex(event, authors, authorIndex);
+});
+
