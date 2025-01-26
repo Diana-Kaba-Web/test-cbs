@@ -1,0 +1,1 @@
+Test assignment for practice in the company CyberBionic Systematics. The task is to create a one-page site that allows managing data about writers and their works. Created using the HTML5, CSS3 (Bootstrap 5), JavaScript.
