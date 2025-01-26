@@ -22,9 +22,19 @@ export function showAuthorForm() {
     authorFormSection.classList.remove("d-none");
 }
 
+export function hideAuthorForm() {
+    const authorFormSection = document.querySelector(".author-form");
+    authorFormSection.classList.add("d-none");
+}
+
 export function showBookForm() {
     const bookFormSection = document.querySelector(".book-form");
     bookFormSection.classList.remove("d-none");
+}
+
+export function hideBookForm() {
+    const bookFormSection = document.querySelector(".book-form");
+    bookFormSection.classList.add("d-none");
 }
 
 export function makeRows(authors) {
@@ -92,6 +102,7 @@ export function addAuthor(event, authors) {
     const newAuthor = new Classes.Author(lastName, firstName, middleName, yearDate);
     authors.push(newAuthor);
 
+    saveToLocalStorage(authors);
     makeRow(authors);
     populateAuthorDropdown(authors);
 
@@ -121,9 +132,34 @@ export function addBook(event, authors) {
     const newBook = new Classes.Book(title, pages, genre);
     authors[authorIndex].addBook(newBook);
 
+    saveToLocalStorage(authors);
     makeRows(authors);
     addDetailsEventListeners(authors);
 
     document.querySelector(".book-form").classList.add("d-none");
     document.getElementById("book-form").reset();
+}
+
+// LOCALSTORAGE
+
+export function loadFromLocalStorage() {
+    const savedAuthors = localStorage.getItem("authors");
+    if (!savedAuthors) return [];
+
+    const authors = JSON.parse(savedAuthors);
+    return authors.map(authorData => {
+        const author = new Classes.Author(
+            authorData.lastName,
+            authorData.firstName,
+            authorData.middleName,
+            authorData.birthYear
+        );
+        author.books = authorData.books.map(bookData => new Classes.Book(bookData.title, bookData.pages, bookData.genre));
+        author.countOfBooks = author.books.length;
+        return author;
+    });
+}
+
+export function saveToLocalStorage(authors) {
+    localStorage.setItem("authors", JSON.stringify(authors));
 }
