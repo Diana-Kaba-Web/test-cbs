@@ -7,11 +7,11 @@ export class Book {
 }
 
 export class Author {
-    constructor(lastName, firstName, middleName = '', birthDate) {
+    constructor(lastName, firstName, middleName = '', birthYear) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;
-        this.birthDate = birthDate;
+        this.birthYear = birthYear;
         this.books = [];
         this.countOfBooks = 0;
     }

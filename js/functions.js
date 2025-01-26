@@ -1,3 +1,5 @@
+import * as Classes from './classes.js';
+
 export function showAuthorDetails(authors, index) {
     const author = authors[index];
     console.log("Автор:", author);
@@ -5,7 +7,7 @@ export function showAuthorDetails(authors, index) {
     authorDetailsSection.classList.remove("d-none");
 
     document.getElementById("author-name").textContent = `${author.lastName} ${author.firstName} ${author.middleName || ''}`;
-    document.getElementById("author-birthdate").textContent = author.birthDate;
+    document.getElementById("author-birthyear").textContent = author.birthYear;
     const booksList = document.getElementById("author-books");
     booksList.innerHTML = author.books.map(book => `<li>"${book.title}" - ${book.genre}, ${book.pages} сторінок</li>`).join("");
 }
@@ -13,6 +15,11 @@ export function showAuthorDetails(authors, index) {
 export function hideAuthorDetails() {
     const authorDetailsSection = document.querySelector(".author-details");
     authorDetailsSection.classList.add("d-none");
+}
+
+export function showAuthorForm() {
+    const authorFormSection = document.querySelector(".author-form");
+    authorFormSection.classList.remove("d-none");
 }
 
 export function makeRows(authors) {
@@ -28,4 +35,50 @@ export function makeRows(authors) {
         </tr>`;
         i++;
     });
+}
+
+export function makeRow(authors) {
+    let i = authors.length-1;
+    console.log(authors[i]);
+    document.querySelector("tbody").innerHTML += `
+    <tr>
+        <td>${authors[i].firstName} ${authors[i].lastName}</td>
+        <td>${authors[i].countOfBooks}</td>
+        <td>
+            <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
+        </td>
+    </tr>`;
+    addDetailsEventListeners(authors);
+}
+
+export function addDetailsEventListeners(authors) {
+    document.querySelectorAll(".btn-details").forEach(btn => {
+        btn.addEventListener('click', (event) => {
+            const authorIndex = event.target.getAttribute("data-author-index");
+            showAuthorDetails(authors, authorIndex);
+        });
+    });
+}
+
+export function addAuthor(event, authors) {
+    event.preventDefault();
+
+    const lastName = document.getElementById("author-lastname").value.trim();
+    const firstName = document.getElementById("author-firstname").value.trim();
+    const middleName = document.getElementById("author-middlename").value.trim();
+    const yearDate = document.getElementById("author-yearbirth").value;
+    if (yearDate < 1900 || yearDate > Number(new Date().getFullYear())) {
+        document.getElementById("error-year").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-year").classList.add("d-none");
+    }
+
+    const authorFormSection = document.querySelector(".author-form");
+
+    const newAuthor = new Classes.Author(lastName, firstName, middleName, yearDate);
+    authors.push(newAuthor);
+    makeRow(authors);
+
+    authorFormSection.classList.add("d-none");
 }

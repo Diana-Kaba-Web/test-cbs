@@ -25,11 +25,10 @@ author3.addBook(book5);
 
 Functions.makeRows(authors);
 
+Functions.addDetailsEventListeners(authors);
 document.querySelector(".btn-hide").addEventListener("click", Functions.hideAuthorDetails);
 
-document.querySelectorAll(".btn-details").forEach(button => {
-    button.addEventListener("click", (event) => {
-        const authorIndex = event.target.getAttribute("data-author-index");
-        Functions.showAuthorDetails(authors, authorIndex);
-    });
+document.querySelector(".add-author").addEventListener("click", Functions.showAuthorForm);
+document.getElementById("author-form").addEventListener("submit", (event) => {
+    Functions.addAuthor(event, authors);
 });
