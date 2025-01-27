@@ -4,7 +4,8 @@
 .delete-book-form,
 .author-edit-form,
 .book-edit-form,
-.book-index-form {
+.book-index-form,
+.genres {
     background-color: #f6f6f6;
     border-radius: 4px;
 }

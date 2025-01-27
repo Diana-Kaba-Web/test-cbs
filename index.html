@@ -15,11 +15,12 @@
     <div class="container mt-5">
         <h1 class="text-center m-5">Письменники та їх твори</h1>
 
-        <!-- BUTTON ADD AUTHOR -->
+        <!-- BUTTONS CONTAINER -->
         <div class="container mb-2">
             <button class="btn btn-primary add-author">Додати автора</button>
+            <button class="btn btn-primary show-genres">Жанри</button>
         </div>
-        <!-- /BUTTON ADD AUTHOR -->
+        <!-- /BUTTONS CONTAINER -->
 
         <!-- TABLE CONTAINER -->
         <div class="container">
@@ -33,6 +34,14 @@
             </table>
         </div>
         <!-- /TABLE CONTAINER -->
+
+        <!-- GENRES CONTAINER -->
+        <div class="container mt-4 p-5 d-none genres">
+            <h3>Список жанрів</h3>
+            <ul id="genres-list"></ul>
+            <button class="btn btn-primary hide-list">Заховати список</button>
+        </div>
+        <!-- /GENRES CONTAINER -->
 
         <!-- DETAILS CONTAINER -->
         <div class="container mt-4 p-5 d-none author-details">
@@ -93,7 +102,6 @@
                     <select id="book-genre" class="form-control" required>
                         <option value="">Виберіть жанр</option>
                     </select>
-                    <!-- <input type="text" id="book-genre" class="form-control" required> -->
                 </div>
                 <div class="mb-3">
                     <label for="book-author" class="form-label">Автор</label>
@@ -163,7 +171,6 @@
                 </div>
                 <div class="mb-3">
                     <label for="book-genre-edit" class="form-label">Жанр</label>
-                    <!-- <input type="text" id="book-genre-edit" class="form-control" required> -->
                     <select id="book-genre-edit" class="form-control" required>
                         <option value="">Виберіть жанр</option>
                     </select>

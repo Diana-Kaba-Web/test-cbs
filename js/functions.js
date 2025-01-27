@@ -73,7 +73,7 @@ export function makeRow(authors) {
         <td>${authors[i].countOfBooks}</td>
         <td>
             <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
-            <button class="btn btn-primary btn-edit btn-sm" data-author-index="${i}">Деталі</button>
+            <button class="btn btn-primary btn-edit btn-sm" data-author-index="${i}">Редагувати</button>
             <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
         </td>
     </tr>`;
@@ -137,6 +137,7 @@ export function populateAuthorDropdown(authors) {
 
 export function populateGenreDropdown(genres, dropdownId) {
     const dropdown = document.getElementById(dropdownId);
+    dropdown.innerHTML = '';
     dropdown.innerHTML = genres
         .map((genre, index) => `<option value="${index}">${genre.name}</option>`)
         .join("");
@@ -291,9 +292,9 @@ export function showEditBookForm(authors, authorIndex, bookIndex, genres) {
 
     document.getElementById("book-title-edit").value = book.title;
     document.getElementById("book-pages-edit").value = book.pages;
-    // document.getElementById("book-genre-edit").value = book.genre;
 
     const bookAuthorSelect = document.getElementById("book-author-edit");
+    bookAuthorSelect.innerHTML = '';
     bookAuthorSelect.innerHTML = authors
         .map((author, index) => {
             const selected = index === parseInt(authorIndex, 10) ? "selected" : "";
@@ -302,6 +303,7 @@ export function showEditBookForm(authors, authorIndex, bookIndex, genres) {
         .join("");
 
     const genreDropdown = document.getElementById("book-genre-edit");
+    genreDropdown.innerHTML = '';
     genreDropdown.innerHTML = genres
         .map((genre, index) => {
             const selected = genre.name === book.genre ? "selected" : "";
@@ -319,7 +321,6 @@ export function editBook(authors, genres) {
     const genre = genres[genreIndex];
     const updatedTitle = document.getElementById("book-title-edit").value.trim();
     const updatedPages = Number(document.getElementById("book-pages-edit").value);
-    // const updatedGenre = document.getElementById("book-genre-edit").value.trim();
     const updatedAuthorIndex = Number(document.getElementById("book-author-edit").value);
 
     const isDuplicate = authors[updatedAuthorIndex].books.some(
@@ -396,4 +397,20 @@ export function loadGenresFromLocalStorage() {
 
 export function saveGenresToLocalStorage(genres) {
     localStorage.setItem("genres", JSON.stringify(genres));
+}
+
+// Genres
+export function showGenres() {
+    document.querySelector('.genres').classList.remove('d-none');
+    const ul = document.querySelector('#genres-list');
+    ul.innerHTML = '';
+    const genres = loadGenresFromLocalStorage();
+
+    genres.forEach(genre => {
+        ul.innerHTML += `<li>${genre.name}</li> `;
+    });
+}
+
+export function hideListOfGenres() {
+    document.querySelector('.genres').classList.add('d-none');
 }

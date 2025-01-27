@@ -21,8 +21,7 @@ if (authors.length === 0 && genres.length === 0) {
 
     genres.push(genre1);
     genres.push(genre2);
-    // genres.push(genre3);
-    genres.push(genre4);
+    genres.push(genre3);
 
     Functions.saveGenresToLocalStorage(genres);
 
@@ -118,3 +117,6 @@ document.getElementById("book-edit-form").addEventListener("submit", (event) => 
     event.preventDefault();
     Functions.editBook(authors, genres);
 });
+
+document.querySelector('.show-genres').addEventListener('click', Functions.showGenres);
+document.querySelector('.hide-list').addEventListener('click', Functions.hideListOfGenres);
