@@ -115,6 +115,13 @@ export function addEditEventListeners(authors) {
     });
 }
 
+export function addListeners(authors) {
+    addDeleteBookEventListeners(authors);
+    addDeletedEventListeners(authors);
+    addDetailsEventListeners(authors);
+    addEditEventListeners(authors);
+}
+
 export function populateAuthorDropdown(authors) {
     const dropdown = document.getElementById("book-author");
 
@@ -257,12 +264,81 @@ export function editAuthor(authors, index, updatedData) {
     addListeners(authors);
 }
 
+export function showEditBookForm(authors, authorIndex, bookIndex) {
+    const book = authors[authorIndex].books[bookIndex];
+    const bookEditFormSection = document.querySelector(".book-edit-form");
 
-export function addListeners(authors) {
-    addDeleteBookEventListeners(authors);
-    addDeletedEventListeners(authors);
-    addDetailsEventListeners(authors);
-    addEditEventListeners(authors);
+    bookEditFormSection.classList.remove("d-none");
+    bookEditFormSection.setAttribute("data-author-index", authorIndex);
+    bookEditFormSection.setAttribute("data-book-index", bookIndex);
+
+    document.getElementById("book-title-edit").value = book.title;
+    document.getElementById("book-pages-edit").value = book.pages;
+    document.getElementById("book-genre-edit").value = book.genre;
+
+    const bookAuthorSelect = document.getElementById("book-author-edit");
+    bookAuthorSelect.innerHTML = authors
+        .map((author, index) => {
+            const selected = index === parseInt(authorIndex, 10) ? "selected" : "";
+            return `<option value="${index}" ${selected}>${author.firstName} ${author.lastName}</option>`;
+        })
+        .join("");
+}
+
+
+export function editBook(authors) {
+    const bookEditFormSection = document.querySelector(".book-edit-form");
+
+    const authorIndex = Number(bookEditFormSection.getAttribute("data-author-index"));
+    const bookIndex = Number(bookEditFormSection.getAttribute("data-book-index"));
+
+    const updatedTitle = document.getElementById("book-title-edit").value.trim();
+    const updatedPages = Number(document.getElementById("book-pages-edit").value);
+    const updatedGenre = document.getElementById("book-genre-edit").value.trim();
+    const updatedAuthorIndex = Number(document.getElementById("book-author-edit").value);
+
+    const isDuplicate = authors[updatedAuthorIndex].books.some(
+        (book, index) => book.title.toLowerCase() === updatedTitle.toLowerCase() && index !== bookIndex
+    );
+
+    if (isDuplicate) {
+        document.getElementById("error-title-edit").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-title-edit").classList.add("d-none");
+    }
+
+    if (authorIndex !== updatedAuthorIndex) {
+        const [book] = authors[authorIndex].books.splice(bookIndex, 1);
+        authors[updatedAuthorIndex].books.push(book);
+    }
+
+    const book = authors[updatedAuthorIndex].books[authorIndex === updatedAuthorIndex ? bookIndex : authors[updatedAuthorIndex].books.length - 1];
+    book.title = updatedTitle;
+    book.pages = updatedPages;
+    book.genre = updatedGenre;
+
+    saveToLocalStorage(authors);
+
+    makeRows(authors);
+    hideEditBookForm();
+    addListeners(authors);
+}
+
+export function hideEditBookForm() {
+    const bookEditFormSection = document.querySelector(".book-edit-form");
+    bookEditFormSection.classList.add("d-none");
+}
+
+export function showBookIndexForm(authorIndex) {
+    const bookIndexFormSection = document.querySelector(".book-index-form");
+    bookIndexFormSection.classList.remove("d-none");
+    bookIndexFormSection.setAttribute("data-author-index", authorIndex);
+}
+
+export function hideBookIndexForm() {
+    const bookIndexFormSection = document.querySelector(".book-index-form");
+    bookIndexFormSection.classList.add("d-none");
 }
 
 // LOCALSTORAGE

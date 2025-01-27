@@ -58,6 +58,7 @@ document.getElementById("delete-book-form").addEventListener("submit", (event) =
 });
 
 document.querySelector(".hide-author-edit-form").addEventListener("click", Functions.hideEditAuthorForm);
+document.querySelector(".hide-edit-book-form").addEventListener("click", Functions.hideEditBookForm);
 
 document.getElementById("author-edit-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -71,4 +72,32 @@ document.getElementById("author-edit-form").addEventListener("submit", (event) =
     };
 
     Functions.editAuthor(authors, index, updatedData);
+});
+
+document.getElementById("book-index-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const bookIndexFormSection = document.querySelector(".book-index-form");
+    const authorIndex = bookIndexFormSection.getAttribute("data-author-index");
+    const bookIndex = Number(document.getElementById("book-index-edit").value);
+
+    if (isNaN(bookIndex) || bookIndex < 0 || bookIndex >= authors[authorIndex].books.length) {
+        document.getElementById("error-book-index-edit").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-book-index-edit").classList.add("d-none");
+    }
+
+    Functions.hideBookIndexForm();
+    Functions.showEditBookForm(authors, authorIndex, bookIndex);
+});
+
+document.querySelector(".edit-book").addEventListener("click", () => {
+    const authorIndex = document.querySelector(".author-details").getAttribute("data-author-index");
+    Functions.showBookIndexForm(authorIndex);
+});
+
+document.getElementById("book-edit-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    Functions.editBook(authors);
 });
