@@ -49,6 +49,7 @@ document.getElementById("book-form").addEventListener("submit", (event) => {
 
 Functions.addDeletedEventListeners(authors);
 Functions.addDeleteBookEventListeners(authors);
+Functions.addEditEventListeners(authors);
 
 document.querySelector(".delete-book").addEventListener("click", Functions.showDeleteBookForm);
 document.getElementById("delete-book-form").addEventListener("submit", (event) => {
@@ -56,3 +57,18 @@ document.getElementById("delete-book-form").addEventListener("submit", (event) =
     Functions.deleteBookByIndex(event, authors, authorIndex);
 });
 
+document.querySelector(".hide-author-edit-form").addEventListener("click", Functions.hideEditAuthorForm);
+
+document.getElementById("author-edit-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const index = document.querySelector(".author-edit-form").getAttribute("data-author-index");
+    const updatedData = {
+        lastName: document.getElementById("author-lastname-edit").value,
+        firstName: document.getElementById("author-firstname-edit").value,
+        middleName: document.getElementById("author-middlename-edit").value,
+        birthYear: document.getElementById("author-yearbirth-edit").value
+    };
+
+    Functions.editAuthor(authors, index, updatedData);
+});

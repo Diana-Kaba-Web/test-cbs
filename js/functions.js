@@ -53,6 +53,7 @@ export function makeRows(authors) {
             <td>${author.countOfBooks}</td>
             <td>
                 <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
+                <button class="btn btn-primary btn-edit btn-sm" data-author-index="${i}">Редагувати</button>
                 <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
             </td>
         </tr>`;
@@ -69,6 +70,7 @@ export function makeRow(authors) {
         <td>${authors[i].countOfBooks}</td>
         <td>
             <button class="btn btn-primary btn-details btn-sm" data-author-index="${i}">Деталі</button>
+            <button class="btn btn-primary btn-edit btn-sm" data-author-index="${i}">Деталі</button>
             <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
         </td>
     </tr>`;
@@ -104,6 +106,15 @@ export function addDeleteBookEventListeners(authors) {
     });
 }
 
+export function addEditEventListeners(authors) {
+    document.querySelectorAll(".btn-edit").forEach(btn => {
+        btn.addEventListener("click", (event) => {
+            const authorIndex = event.target.getAttribute("data-author-index");
+            showEditAuthorForm(authors, authorIndex);
+        });
+    });
+}
+
 export function populateAuthorDropdown(authors) {
     const dropdown = document.getElementById("book-author");
 
@@ -119,7 +130,7 @@ export function addAuthor(event, authors) {
     const firstName = document.getElementById("author-firstname").value.trim();
     const middleName = document.getElementById("author-middlename").value.trim();
     const yearDate = document.getElementById("author-yearbirth").value;
-    if (yearDate < 1900 || yearDate > Number(new Date().getFullYear())) {
+    if (yearDate < 1500 || yearDate > Number(new Date().getFullYear())) {
         document.getElementById("error-year").classList.remove("d-none");
         return;
     } else {
@@ -132,6 +143,7 @@ export function addAuthor(event, authors) {
     saveToLocalStorage(authors);
     makeRow(authors);
     populateAuthorDropdown(authors);
+    addListeners(authors);
 
     document.querySelector(".author-form").classList.add("d-none");
     document.getElementById("author-form").reset();
@@ -161,7 +173,7 @@ export function addBook(event, authors) {
 
     saveToLocalStorage(authors);
     makeRows(authors);
-    addDetailsEventListeners(authors);
+    addListeners(authors);
 
     document.querySelector(".book-form").classList.add("d-none");
     document.getElementById("book-form").reset();
@@ -173,8 +185,7 @@ export function deleteAuthor(index, authors) {
         authors.splice(index, 1);
         saveToLocalStorage(authors);
         makeRows(authors);
-        addDeletedEventListeners(authors);
-        addDetailsEventListeners(authors);
+        addListeners(authors);
     }
 }
 
@@ -202,6 +213,57 @@ export function deleteBookByIndex(event, authors, authorIndex) {
     }
 }
 
+export function showEditAuthorForm(authors, index) {
+    const author = authors[index];
+    const authorFormSection = document.querySelector(".author-edit-form");
+    authorFormSection.classList.remove("d-none");
+    authorFormSection.setAttribute("data-author-index", index);
+
+    console.log(author);
+
+    document.getElementById("author-lastname-edit").value = author.lastName;
+    document.getElementById("author-firstname-edit").value = author.firstName;
+    document.getElementById("author-middlename-edit").value = author.middleName || '';
+    document.getElementById("author-yearbirth-edit").value = author.birthYear;
+
+    addListeners(authors);
+}
+
+export function hideEditAuthorForm() {
+    const authorFormSection = document.querySelector(".author-edit-form");
+    authorFormSection.classList.add("d-none");
+}
+
+export function editAuthor(authors, index, updatedData) {
+    authors[index].lastName = updatedData.lastName.trim();
+    authors[index].firstName = updatedData.firstName.trim();
+    authors[index].middleName = updatedData.middleName.trim() || '';
+
+    const yearDate = Number(updatedData.birthYear);
+
+    if (yearDate < 1500 || yearDate > new Date().getFullYear()) {
+        document.getElementById("error-year-edit").classList.remove("d-none");
+        return;
+    } else {
+        document.getElementById("error-year-edit").classList.add("d-none");
+    }
+
+    authors[index].birthYear = yearDate;
+
+    saveToLocalStorage(authors);
+    makeRows(authors);
+
+    hideEditAuthorForm();
+    addListeners(authors);
+}
+
+
+export function addListeners(authors) {
+    addDeleteBookEventListeners(authors);
+    addDeletedEventListeners(authors);
+    addDetailsEventListeners(authors);
+    addEditEventListeners(authors);
+}
 
 // LOCALSTORAGE
 
