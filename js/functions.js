@@ -1,5 +1,6 @@
 import * as Classes from './classes.js';
 
+// Details
 export function showAuthorDetails(authors, index) {
     const author = authors[index];
     console.log("Автор:", author);
@@ -18,6 +19,7 @@ export function hideAuthorDetails() {
     authorDetailsSection.classList.add("d-none");
 }
 
+// Show/hide forms
 export function showAuthorForm() {
     const authorFormSection = document.querySelector(".author-form");
     authorFormSection.classList.remove("d-none");
@@ -42,6 +44,7 @@ export function showDeleteBookForm() {
     document.querySelector(".delete-book-form").classList.remove("d-none");
 }
 
+// Make rows of table
 export function makeRows(authors) {
     document.querySelector("tbody").innerHTML = '';
 
@@ -78,6 +81,7 @@ export function makeRow(authors) {
     addDeletedEventListeners(authors);
 }
 
+// EventListeners
 export function addDetailsEventListeners(authors) {
     document.querySelectorAll(".btn-details").forEach(btn => {
         btn.addEventListener('click', (event) => {
@@ -130,6 +134,7 @@ export function populateAuthorDropdown(authors) {
     });
 }
 
+// Opportunity of adding
 export function addAuthor(event, authors) {
     event.preventDefault();
 
@@ -186,6 +191,7 @@ export function addBook(event, authors) {
     document.getElementById("book-form").reset();
 }
 
+// Opportunity of deleting
 export function deleteAuthor(index, authors) {
     const isSure = confirm("Ви точно бажаєте видалити автора?");
     if (isSure) {
@@ -220,6 +226,7 @@ export function deleteBookByIndex(event, authors, authorIndex) {
     }
 }
 
+// Opportunity of editing
 export function showEditAuthorForm(authors, index) {
     const author = authors[index];
     const authorFormSection = document.querySelector(".author-edit-form");
@@ -341,8 +348,7 @@ export function hideBookIndexForm() {
     bookIndexFormSection.classList.add("d-none");
 }
 
-// LOCALSTORAGE
-
+// LocalStorage
 export function loadFromLocalStorage() {
     const savedAuthors = localStorage.getItem("authors");
     if (!savedAuthors) return [];
