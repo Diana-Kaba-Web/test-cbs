@@ -21,3 +21,9 @@ export class Author {
         this.countOfBooks++;
     }
 }
+
+export class Genre {
+    constructor(name) {
+        this.name = name;
+    }
+}

@@ -2,8 +2,10 @@ import * as Classes from './classes.js';
 import * as Functions from './functions.js';
 
 const authors = Functions.loadFromLocalStorage();
+const genres = Functions.loadGenresFromLocalStorage();
+
 console.log(authors);
-if (!authors || authors.length === 0) {
+if (authors.length === 0 && genres.length === 0) {
     const author1 = new Classes.Author("Шевченко", "Тарас", "Григорович", 1564);
     const author2 = new Classes.Author("Шекспір", "Вільям", "", 1722);
     const author3 = new Classes.Author("Роулінг", "Джоан", "", 1965);
@@ -12,11 +14,23 @@ if (!authors || authors.length === 0) {
     authors.push(author2);
     authors.push(author3);
 
-    const book1 = new Classes.Book("Кобзар", 256, "поезія");
-    const book2 = new Classes.Book("Катерина", 164, "поезія");
-    const book3 = new Classes.Book("Ромео і Джульєтта", 208, "вірші, трагедія");
-    const book4 = new Classes.Book("Гамлет", 240, "вірші, трагедія");
-    const book5 = new Classes.Book("Гаррі Поттер і прокляте дитя", 350, "фентезі");
+    const genre1 = new Classes.Genre("поезія");
+    const genre2 = new Classes.Genre("вірші");
+    const genre3 = new Classes.Genre("трагедія");
+    const genre4 = new Classes.Genre("фентезі");
+
+    genres.push(genre1);
+    genres.push(genre2);
+    // genres.push(genre3);
+    genres.push(genre4);
+
+    Functions.saveGenresToLocalStorage(genres);
+
+    const book1 = new Classes.Book("Кобзар", 256, genre1.name);
+    const book2 = new Classes.Book("Катерина", 164, genre1.name);
+    const book3 = new Classes.Book("Ромео і Джульєтта", 208, genre2.name);
+    const book4 = new Classes.Book("Гамлет", 240, genre2.name);
+    const book5 = new Classes.Book("Гаррі Поттер і прокляте дитя", 350, genre4.name);
 
     author1.addBook(book1);
     author1.addBook(book2);
@@ -44,9 +58,10 @@ document.getElementById("author-form").addEventListener("submit", (event) => {
 
 Functions.populateAuthorDropdown(authors);
 document.getElementById("book-form").addEventListener("submit", (event) => {
-    Functions.addBook(event, authors);
+    Functions.addBook(event, authors, genres);
 });
 
+Functions.populateGenreDropdown(genres, 'book-genre');
 Functions.addDeletedEventListeners(authors);
 Functions.addDeleteBookEventListeners(authors);
 Functions.addEditEventListeners(authors);
@@ -74,6 +89,8 @@ document.getElementById("author-edit-form").addEventListener("submit", (event) =
     Functions.editAuthor(authors, index, updatedData);
 });
 
+Functions.populateGenreDropdown(genres, 'book-genre-edit');
+
 document.getElementById("book-index-form").addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -89,7 +106,7 @@ document.getElementById("book-index-form").addEventListener("submit", (event) =>
     }
 
     Functions.hideBookIndexForm();
-    Functions.showEditBookForm(authors, authorIndex, bookIndex);
+    Functions.showEditBookForm(authors, authorIndex, bookIndex, genres);
 });
 
 document.querySelector(".edit-book").addEventListener("click", () => {
@@ -99,5 +116,5 @@ document.querySelector(".edit-book").addEventListener("click", () => {
 
 document.getElementById("book-edit-form").addEventListener("submit", (event) => {
     event.preventDefault();
-    Functions.editBook(authors);
+    Functions.editBook(authors, genres);
 });
