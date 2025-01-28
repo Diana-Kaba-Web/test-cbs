@@ -85,8 +85,7 @@ export function makeRow(authors) {
             <button class="btn btn-primary btn-delete btn-sm" data-author-index="${i}">Видалити</button>
         </td>
     </tr>`;
-    addDetailsEventListeners(authors);
-    addDeletedEventListeners(authors);
+    addListeners(authors);
 }
 
 // EventListeners
@@ -265,14 +264,16 @@ export function deleteBookByIndex(event, authors, authorIndex) {
 
     const isSure = confirm("Ви точно бажаєте видалити цю книгу?");
     if (isSure) {
-        authors[authorIndex].books.splice(bookIndex, 1); // Видалення книги
-        authors[authorIndex].countOfBooks--; // Оновлення кількості книг
-        saveToLocalStorage(authors); // Зберігаємо зміни
-        showAuthorDetails(authors, authorIndex); // Оновлюємо деталі автора
-        makeRows(authors); // Оновлюємо таблицю авторів
+        authors[authorIndex].books.splice(bookIndex, 1);
+        authors[authorIndex].countOfBooks--;
+        saveToLocalStorage(authors);
+        showAuthorDetails(authors, authorIndex);
+        makeRows(authors);
 
-        document.querySelector(".delete-book-form").classList.add("d-none"); // Ховаємо форму
-        document.getElementById("delete-book-form").reset(); // Скидаємо форму
+        document.querySelector(".delete-book-form").classList.add("d-none");
+        document.getElementById("delete-book-form").reset();
+    } else {
+        document.querySelector(".delete-book-form").classList.add("d-none");
     }
 }
 
@@ -525,4 +526,53 @@ function validateTextField(value, pattern, fieldName) {
         return false;
     }
     return true;
+}
+
+// Search
+export function searchBooks(authors, searchTitle) {
+    const results = [];
+
+    authors.forEach((author, authorIndex) => {
+        author.books.forEach((book, bookIndex) => {
+            if (book.title.toLowerCase().includes(searchTitle.toLowerCase())) {
+                results.push({
+                    title: book.title,
+                    genre: book.genre,
+                    pages: book.pages,
+                    author: `${author.firstName} ${author.lastName}`,
+                    authorIndex,
+                    bookIndex
+                });
+            }
+        });
+    });
+
+    return results;
+}
+
+export function renderSearchResults(results) {
+    const searchResultsContainer = document.getElementById("search-results");
+
+    if (results.length === 0) {
+        searchResultsContainer.innerHTML = "<p>Нічого не знайдено.</p>";
+        return;
+    }
+
+    searchResultsContainer.innerHTML = `
+        <h4>Результати пошуку:</h4>
+        <div class="container mt-2 p-2">
+            <ul class="list-group">
+            ${results
+                .map(
+                    (result) => `
+                <li class="list-group-item">
+                    <strong>${result.title}</strong> (${result.genre}, ${result.pages} сторінок) 
+                    - Автор: ${result.author}
+                    <button class="btn btn-sm btn-primary float-end view-book-details" data-author-index="${result.authorIndex}" data-book-index="${result.bookIndex}">Деталі</button>
+                </li>`
+                )
+                .join("")}
+            </ul>
+        </div>
+    `;
 }

@@ -44,8 +44,8 @@ if (authors.length === 0 && genres.length === 0) {
 }
 
 Functions.makeRows(authors);
+Functions.addListeners(authors);
 
-Functions.addDetailsEventListeners(authors);
 document.querySelector(".btn-hide").addEventListener("click", Functions.hideAuthorDetails);
 
 document.querySelector(".add-author").addEventListener("click", Functions.showAuthorForm);
@@ -63,9 +63,6 @@ document.getElementById("book-form").addEventListener("submit", (event) => {
 });
 
 Functions.populateGenreDropdown(genres, 'book-genre');
-Functions.addDeletedEventListeners(authors);
-Functions.addDeleteBookEventListeners(authors);
-Functions.addEditEventListeners(authors);
 
 document.querySelector(".delete-book").addEventListener("click", Functions.showDeleteBookForm);
 document.getElementById("delete-book-form").addEventListener("submit", (event) => {
@@ -127,3 +124,23 @@ document.querySelector('.add-genre').addEventListener('click', Functions.showAdd
 document.querySelector('.hide-genre-form').addEventListener('click', Functions.hideAddGenreForm);
 document.querySelector('#add-genre-form').addEventListener('submit', (e) => Functions.addGenre(e, genres));
 document.querySelector('.sort-authors').addEventListener('click', () => Functions.sortAuthors(authors));
+
+document.getElementById("search-book-button").addEventListener("click", () => {
+    const searchTitle = document.getElementById("search-book-title").value.trim();
+
+    if (searchTitle === "") {
+        alert("Введіть назву книги для пошуку.");
+        return;
+    }
+
+    const results = Functions.searchBooks(authors, searchTitle);
+    Functions.renderSearchResults(results);
+
+    document.querySelectorAll(".view-book-details").forEach((button) => {
+        button.addEventListener("click", (event) => {
+            const authorIndex = event.target.getAttribute("data-author-index");
+            const bookIndex = event.target.getAttribute("data-book-index");
+            Functions.showEditBookForm(authors, authorIndex, bookIndex, genres);
+        });
+    });
+});
