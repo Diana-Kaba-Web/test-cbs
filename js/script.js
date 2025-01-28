@@ -5,6 +5,8 @@ const authors = Functions.loadFromLocalStorage();
 const genres = Functions.loadGenresFromLocalStorage();
 
 console.log(authors);
+console.log(genres);
+
 if (authors.length === 0 && genres.length === 0) {
     const author1 = new Classes.Author("Шевченко", "Тарас", "Григорович", 1564);
     const author2 = new Classes.Author("Шекспір", "Вільям", "", 1722);
@@ -120,3 +122,7 @@ document.getElementById("book-edit-form").addEventListener("submit", (event) => 
 
 document.querySelector('.show-genres').addEventListener('click', Functions.showGenres);
 document.querySelector('.hide-list').addEventListener('click', Functions.hideListOfGenres);
+
+document.querySelector('.add-genre').addEventListener('click', Functions.showAddGenreForm);
+document.querySelector('.hide-genre-form').addEventListener('click', Functions.hideAddGenreForm);
+document.querySelector('#add-genre-form').addEventListener('submit', (e) => Functions.addGenre(e, genres));

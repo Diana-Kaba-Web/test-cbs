@@ -40,6 +40,7 @@
             <h3>Список жанрів</h3>
             <ul id="genres-list"></ul>
             <button class="btn btn-primary hide-list">Заховати список</button>
+            <button class="btn btn-primary add-genre">Додати жанр</button>
         </div>
         <!-- /GENRES CONTAINER -->
 
@@ -56,6 +57,21 @@
             <button class="btn btn-sm btn-primary btn-hide">Заховати деталі</button>
         </div>
         <!-- /DETAILS CONTAINER -->
+
+        <!-- ADD GENRE FORM -->
+        <div class="container mt-4 p-5 d-none add-genre-form">
+            <h3>Додавання жанру</h3>
+            <form id="add-genre-form" class="mb-4">
+                <div class="mb-3">
+                    <label for="genre-name" class="form-label">Назва жанру</label>
+                    <input type="text" id="genre-name" class="form-control" required>
+                    <div class="mt-2 alert alert-danger d-none" id="error-genre-name">Помилка! Такий жанр уже існує.</div>
+                </div>
+                <button type="submit" class="btn btn-primary hide-genre-form">Заховати форму</button>
+                <button type="submit" class="btn btn-primary">Додати жанр</button>
+            </form>
+        </div>
+        <!-- /ADD GENRE FORM -->
 
         <!-- FORM ADD AUTHOR -->
         <div class="container p-5 d-none author-form">

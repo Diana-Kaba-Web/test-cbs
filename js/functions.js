@@ -44,6 +44,14 @@ export function showDeleteBookForm() {
     document.querySelector(".delete-book-form").classList.remove("d-none");
 }
 
+export function showAddGenreForm() {
+    document.querySelector(".add-genre-form").classList.remove("d-none");
+}
+
+export function hideAddGenreForm() {
+    document.querySelector(".add-genre-form").classList.add("d-none");
+}
+
 // Make rows of table
 export function makeRows(authors) {
     document.querySelector("tbody").innerHTML = '';
@@ -413,4 +421,25 @@ export function showGenres() {
 
 export function hideListOfGenres() {
     document.querySelector('.genres').classList.add('d-none');
+}
+
+export function addGenre(event, genres) {
+    event.preventDefault();
+
+    const genreName = document.getElementById("genre-name").value;
+    const genre = new Classes.Genre(genreName);
+
+    const isDuplicate = genres.some(
+        genre => genre.name.toLowerCase() === genreName.toLowerCase()
+    );
+
+    if (isDuplicate) {
+        document.getElementById('error-genre-name').classList.remove('d-none');
+        return;
+    } else {
+        document.getElementById('error-genre-name').classList.add('d-none');
+        genres.push(genre);
+        saveGenresToLocalStorage(genres);
+        hideAddGenreForm();
+    }
 }

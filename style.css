@@ -5,7 +5,8 @@
 .author-edit-form,
 .book-edit-form,
 .book-index-form,
-.genres {
+.genres,
+.add-genre-form {
     background-color: #f6f6f6;
     border-radius: 4px;
 }
