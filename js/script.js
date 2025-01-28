@@ -126,3 +126,4 @@ document.querySelector('.hide-list').addEventListener('click', Functions.hideLis
 document.querySelector('.add-genre').addEventListener('click', Functions.showAddGenreForm);
 document.querySelector('.hide-genre-form').addEventListener('click', Functions.hideAddGenreForm);
 document.querySelector('#add-genre-form').addEventListener('submit', (e) => Functions.addGenre(e, genres));
+document.querySelector('.sort-authors').addEventListener('click', () => Functions.sortAuthors(authors));

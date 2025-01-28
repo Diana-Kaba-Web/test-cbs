@@ -407,6 +407,11 @@ export function saveGenresToLocalStorage(genres) {
     localStorage.setItem("genres", JSON.stringify(genres));
 }
 
+export function sortAuthors(authors) {
+    authors.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    makeRows(authors);
+}
+
 // Genres
 export function showGenres() {
     document.querySelector('.genres').classList.remove('d-none');
