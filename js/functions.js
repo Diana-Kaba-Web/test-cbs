@@ -159,6 +159,14 @@ export function addAuthor(event, authors) {
     const firstName = document.getElementById("author-firstname").value.trim();
     const middleName = document.getElementById("author-middlename").value.trim();
     const yearDate = document.getElementById("author-yearbirth").value;
+
+    const isValid = validateTextField(lastName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Прізвище")
+    && validateTextField(firstName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Ім'я")
+    && (middleName === '' || validateTextField(middleName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{0,50}$", "По батькові"));
+
+    if (!isValid)
+        return;
+
     if (yearDate < 1500 || yearDate > Number(new Date().getFullYear())) {
         document.getElementById("error-year").classList.remove("d-none");
         return;
@@ -183,13 +191,35 @@ export function addBook(event, authors, genres) {
 
     const title = document.getElementById("book-title").value.trim();
     const pages = Number(document.getElementById("book-pages").value);
-    // const genre = document.getElementById("book-genre").value.trim();
     const genreIndex = Number(document.getElementById("book-genre").value);
-    const genre = genres[genreIndex];
-    const authorIndex = document.getElementById("book-author").value;
+    const authorIndex = Number(document.getElementById("book-author").value);
+
+    if (isNaN(genreIndex) || genreIndex < 0 || genreIndex >= genres.length) {
+        alert("Виберіть коректний жанр.");
+        return;
+    }
+    const genre = new Classes.Genre(genres[genreIndex].name);
+
+    if (isNaN(authorIndex) || authorIndex < 0 || authorIndex >= authors.length) {
+        alert("Виберіть коректного автора.");
+        return;
+    }
+
+    if (pages <= 0 || pages > 10000) {
+        alert("Кількість сторінок має бути між 1 і 10 000.");
+        return;
+    }
+
+    const isValid = validateTextField(
+        title,
+        "^[А-Яа-яІіЇїЄєҐґA-Za-z0-9\\s'-]{2,100}$",
+        "Назва книги"
+    );
+
+    if (!isValid) return;
 
     const isDuplicate = authors[authorIndex].books.some(
-        book => book.title.toLowerCase() === title.toLowerCase()
+        (book) => book.title.toLowerCase() === title.toLowerCase()
     );
 
     if (isDuplicate) {
@@ -199,7 +229,7 @@ export function addBook(event, authors, genres) {
         document.getElementById("error-title").classList.add("d-none");
     }
 
-    const newBook = new Classes.Book(title, pages, genre);
+    const newBook = new Classes.Book(title, pages, genre.name);
     authors[authorIndex].addBook(newBook);
 
     saveToLocalStorage(authors);
@@ -209,6 +239,7 @@ export function addBook(event, authors, genres) {
     document.querySelector(".book-form").classList.add("d-none");
     document.getElementById("book-form").reset();
 }
+
 
 // Opportunity of deleting
 export function deleteAuthor(index, authors) {
@@ -268,11 +299,18 @@ export function hideEditAuthorForm() {
 }
 
 export function editAuthor(authors, index, updatedData) {
+    const isValid = validateTextField(updatedData.lastName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Прізвище")
+    && validateTextField(updatedData.firstName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$", "Ім'я")
+    && (updatedData.middleName === '' || validateTextField(updatedData.middleName, "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{0,50}$", "По батькові"));
+
+    if (!isValid)
+        return;
+
     authors[index].lastName = updatedData.lastName.trim();
     authors[index].firstName = updatedData.firstName.trim();
     authors[index].middleName = updatedData.middleName.trim() || '';
-
     const yearDate = Number(updatedData.birthYear);
+
 
     if (yearDate < 1500 || yearDate > new Date().getFullYear()) {
         document.getElementById("error-year-edit").classList.remove("d-none");
@@ -330,6 +368,29 @@ export function editBook(authors, genres) {
     const updatedTitle = document.getElementById("book-title-edit").value.trim();
     const updatedPages = Number(document.getElementById("book-pages-edit").value);
     const updatedAuthorIndex = Number(document.getElementById("book-author-edit").value);
+
+    if (isNaN(genreIndex) || genreIndex < 0 || genreIndex >= genres.length) {
+        alert("Виберіть коректний жанр.");
+        return;
+    }
+
+    if (isNaN(authorIndex) || authorIndex < 0 || authorIndex >= authors.length) {
+        alert("Виберіть коректного автора.");
+        return;
+    }
+
+    if (updatedPages <= 0 || updatedPages > 10000) {
+        alert("Кількість сторінок має бути між 1 і 10 000.");
+        return;
+    }
+
+    const isValid = validateTextField(
+        updatedTitle,
+        "^[А-Яа-яІіЇїЄєҐґA-Za-z0-9\\s'-]{2,100}$",
+        "Назва книги"
+    );
+
+    if (!isValid) return;
 
     const isDuplicate = authors[updatedAuthorIndex].books.some(
         (book, index) => book.title.toLowerCase() === updatedTitle.toLowerCase() && index !== bookIndex
@@ -432,6 +493,13 @@ export function addGenre(event, genres) {
     event.preventDefault();
 
     const genreName = document.getElementById("genre-name").value;
+
+    const pattern = "^[А-Яа-яІіЇїЄєҐґA-Za-z\\s'-]{2,50}$";
+    if (!new RegExp(pattern).test(genreName)) {
+        alert("Назва жанру має містити тільки букви, пробіли, апострофи або дефіси, і бути довжиною від 2 до 50 символів.");
+        return;
+    }
+
     const genre = new Classes.Genre(genreName);
 
     const isDuplicate = genres.some(
@@ -447,4 +515,14 @@ export function addGenre(event, genres) {
         saveGenresToLocalStorage(genres);
         hideAddGenreForm();
     }
+}
+
+// Validate
+function validateTextField(value, pattern, fieldName) {
+    const regex = new RegExp(pattern);
+    if (!regex.test(value.trim())) {
+        alert(`${fieldName} має невірний формат.`);
+        return false;
+    }
+    return true;
 }
